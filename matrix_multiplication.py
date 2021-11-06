@@ -57,6 +57,7 @@ def block_matrix_multiplication(A, B, iteration_order, block_size):
     match iteration_order.upper():
         case 'IJK':
             for i in range(0, len_i, size_I):
+                print(i)
                 for j in range(0, len_j, size_J):
                     for k in range(0, len_k, size_K):
                         A_block = A[i:i + size_I, k:k + size_K]

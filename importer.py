@@ -26,7 +26,3 @@ def resize_matrix(matrix: np.ndarray, desired_size: int) -> np.ndarray:
         for j in range(times):
             new_matrix[i * block_size : (1 + i) * block_size, j * block_size : (j + 1) * block_size] = matrix
     return new_matrix
-
-A = read_file('iga.txt')
-print(A)
-print(resize_matrix(A, 32))
