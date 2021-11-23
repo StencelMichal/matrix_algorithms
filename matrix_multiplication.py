@@ -1,48 +1,47 @@
 import numpy as np
 
+def matrix_multiplication(A, B, iteration_order):
+    len_i = A.shape[0]
+    len_k = A.shape[1]
+    len_j = B.shape[1]
+
+    C = np.zeros((len_i, len_j))
+
+    match iteration_order.upper():
+        case 'IJK':
+            for i in range(len_i):
+                for j in range(len_j):
+                    for k in range(len_k):
+                        C[i, j] += A[i, k] * B[k, j]
+        case 'JIK':
+            for j in range(len_j):
+                for i in range(len_i):
+                    for k in range(len_k):
+                        C[i, j] += A[i, k] * B[k, j]
+        case 'IKJ':
+            for i in range(len_i):
+                for k in range(len_k):
+                    for j in range(len_j):
+                        C[i, j] += A[i, k] * B[k, j]
+        case 'JKI':
+            for j in range(len_j):
+                for k in range(len_k):
+                    for i in range(len_i):
+                        C[i, j] += A[i, k] * B[k, j]
+        case 'KIJ':
+            for k in range(len_k):
+                for i in range(len_i):
+                    for j in range(len_j):
+                        C[i, j] += A[i, k] * B[k, j]
+        case 'KJI':
+            for k in range(len_k):
+                for j in range(len_j):
+                    for i in range(len_i):
+                        C[i, j] += A[i, k] * B[k, j]
+
+    return C
 
 def block_matrix_multiplication(A, B, iteration_order, block_size):
-    def matrix_multiplication(A, B, iteration_order):
-        len_i = A.shape[0]
-        len_k = A.shape[1]
-        len_j = B.shape[1]
-
-        C = np.zeros((len_i, len_j))
-
-        match iteration_order.upper():
-            case 'IJK':
-                for i in range(len_i):
-                    for j in range(len_j):
-                        for k in range(len_k):
-                            C[i, j] += A[i, k] * B[k, j]
-            case 'JIK':
-                for j in range(len_j):
-                    for i in range(len_i):
-                        for k in range(len_k):
-                            C[i, j] += A[i, k] * B[k, j]
-            case 'IKJ':
-                for i in range(len_i):
-                    for k in range(len_k):
-                        for j in range(len_j):
-                            C[i, j] += A[i, k] * B[k, j]
-            case 'JKI':
-                for j in range(len_j):
-                    for k in range(len_k):
-                        for i in range(len_i):
-                            C[i, j] += A[i, k] * B[k, j]
-            case 'KIJ':
-                for k in range(len_k):
-                    for i in range(len_i):
-                        for j in range(len_j):
-                            C[i, j] += A[i, k] * B[k, j]
-            case 'KJI':
-                for k in range(len_k):
-                    for j in range(len_j):
-                        for i in range(len_i):
-                            C[i, j] += A[i, k] * B[k, j]
-
-        return C
-
     len_i = A.shape[0]
     len_k = A.shape[1]
     len_j = B.shape[1]
@@ -57,6 +56,7 @@ def block_matrix_multiplication(A, B, iteration_order, block_size):
     match iteration_order.upper():
         case 'IJK':
             for i in range(0, len_i, size_I):
+                print(i)
                 for j in range(0, len_j, size_J):
                     for k in range(0, len_k, size_K):
                         A_block = A[i:i + size_I, k:k + size_K]
