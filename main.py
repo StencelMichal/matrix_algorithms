@@ -3,8 +3,10 @@ from time import time
 from matplotlib import pyplot as plt
 
 import importer
+from matrix_multiplication import block_matrix_multiplication
 from schur_complement import schur_complement
-
+from sparse_matrix_multiplication import Csc
+from sparse_matrix_multiplication import csc_multiplication
 
 def show_non_zero_scatter(matrix):
     matrix_nonzero = abs(matrix) > 1e-3
@@ -22,25 +24,21 @@ def show_non_zero_scatter(matrix):
 
 
 def main():
-    execute('fem.txt')
+    A = importer.read_file('iga.txt')
+    B = importer.read_file('riga.txt')
+    A = importer.resize_matrix(A, 2 ** 10)
+    B = importer.resize_matrix(A, 2 ** 10)
+
+    A_csc = Csc(A)
+    B_csc = Csc(B)
+
+    start = time()
+    # block_matrix_multiplication(A, B, "JKI", (64, 64, 64))
+    csc_multiplication(A_csc, B_csc)
+    end = time()
+    print(f"time execution: {end - start}\n")
 
 
-def execute(filename):
-    M = importer.read_file(filename)
-    for complement_ratio in [0.5, 0.25, 0.125, 0.0625]:
-        with open("result_" + filename.strip(".txt") + "_" + str(complement_ratio), "w") as f:
-            for power in range(4, 9):
-                M_resized = importer.resize_matrix(M, 2 ** power)
-                complement_size = int(M_resized.shape[0] * complement_ratio)
-                output = f"matrix size: {2 ** power}x{2 ** power}\n"
-                f.write(output)
-                print(output)
-                start = time()
-                schur_complement(M_resized, complement_size)
-                end = time()
-                output = f"time execution: {end - start}\n"
-                f.write(output)
-                print(output)
 
 
 if __name__ == '__main__':
