@@ -34,22 +34,3 @@ def csc_multiplication(csc_1: Csc, csc_2: Csc) -> np.ndarray:
 
     return res
 
-
-if __name__ == '__main__':
-    # M = np.array([[1, 2, 0],
-    #               [0, 0, 4],
-    #               [0, 4, 0]])
-    #
-    # M2 = np.array([[1, 2, 0],
-    #                [3, 4, 0],
-    #                [0, 0, 0]])
-
-    M = np.random.rand(100, 100)
-    M2 = np.random.rand(100, 100)
-
-    A = csc_multiplication(Csc(M), Csc(M2)) * 1.0
-    B = M @ M2 * 1.0
-    print(A)
-    print(B)
-    assert np.allclose(A, B)
-    print(f"The same ? {np.allclose(A, B)}")
