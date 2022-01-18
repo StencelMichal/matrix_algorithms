@@ -1,49 +1,52 @@
 import copy
+import random
 from time import time
-from read import create_matrix
-from sparse_gaussian_elimination import gaussian_elimination
-from sparse_gaussian_elimination import CoordinateFormat
-from guppy import hpy
 
-import importer
-from matrix_multiplication import block_matrix_multiplication
-from schur_complement import schur_complement
-from sparse_matrix_multiplication import Csc
-from sparse_matrix_multiplication import csc_multiplication
+from sparse_gaussian_elimination import *
 
 
+def generate_matrix(size, non_zeros):
+    matrix = np.zeros((size, size))
+    for _ in range(non_zeros):
+        x = random.randint(0, size-1)
+        y = random.randint(0, size-1)
+        val = random.random()
+        matrix[x, y] = val
+        matrix[y, x] = val
+    for i in range(size):
+        matrix[i, i] = random.random()
+
+    return matrix
 
 
 def main():
-
-    matrix = create_matrix("b.txt")
-    h = hpy()
-    h.setref()
-    h1 = h.heap()
-    b = copy.deepcopy(matrix)
-    start = time()
-    gaussian_elimination(b)
-    end = time()
-    h2 = h.heap()
-    print(f"time execution dense: {end - start}\n")
-    print(f"memory usage: {h2.size - h1.size} bytes")
-
-    matrix = create_matrix("b.txt")
+    m1 = generate_matrix(10**2, 1000)
+    # matrix = create_matrix("resources/b.txt")
+    matrix = copy.deepcopy(m1)
     cf = CoordinateFormat(matrix)
-    h = hpy()
-    h.setref()
-    h1 = h.heap()
-    print(h1)
+    draw_nx_graph(SparseGraph(cf))
     start = time()
     cf.gaussian_elimination()
     end = time()
-    h2 = h.heap()
-    print(h2)
+
+    draw_nx_graph(SparseGraph(cf))
     print(f"time execution sparse: {end - start}\n")
-    print(f"memory usage: {h2.size - h1.size} bytes")
 
-
-
+    matrix = copy.deepcopy(m1)
+    cf = CoordinateFormat(matrix)
+    G = SparseGraph(cf)
+    # order = G.cuthil_mckee()
+    order = netowrkx_order(G)
+    matrix = permute_matrix(matrix, order)
+    for i in range(len(matrix)):
+        matrix[i, i] = 1
+    cf = CoordinateFormat(matrix)
+    draw_nx_graph(SparseGraph(cf))
+    start = time()
+    cf.gaussian_elimination()
+    draw_nx_graph(SparseGraph(cf))
+    end = time()
+    print(f"time execution sparse: {end - start}\n")
 
 
 if __name__ == '__main__':
