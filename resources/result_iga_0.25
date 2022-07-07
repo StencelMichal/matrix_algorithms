@@ -1,0 +1,10 @@
+matrix size: 16x16
+time execution: 0.015624523162841797
+matrix size: 32x32
+time execution: 0.23827767372131348
+matrix size: 64x64
+time execution: 3.694469451904297
+matrix size: 128x128
+time execution: 58.216426849365234
+matrix size: 256x256
+time execution: 931.2206890583038
